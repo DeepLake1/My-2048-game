@@ -1,9 +1,6 @@
 package com.javarush.task.task35.task3513;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Model {
@@ -20,8 +17,8 @@ public class Model {
         resetGameTiles();
         this.score = 0;
         this.maxTile = 0;
-        previousScores = new Stack();
-        previousStates = new Stack();
+        previousScores = new Stack<>();
+        previousStates = new Stack<>();
 
     }
 
@@ -205,5 +202,14 @@ Tile[][] newGameTiles = new Tile[tile[0].length][tile[1].length];
         rollback();
 
         return moveEfficiency;
+    }
+    public void autoMove(){
+        PriorityQueue<MoveEfficiency> priorityQueue  = new PriorityQueue<>(4,Collections.reverseOrder());
+        priorityQueue.add(getMoveEfficiency(this::left));
+        priorityQueue.add(getMoveEfficiency(this::right));
+        priorityQueue.add(getMoveEfficiency(this::up));
+        priorityQueue.add(getMoveEfficiency(this::down));
+        Move move = priorityQueue.peek().getMove();
+        move.move();
     }
 }
