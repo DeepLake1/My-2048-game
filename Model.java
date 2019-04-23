@@ -1,8 +1,10 @@
 package com.javarush.task.task35.task3513;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Model {
     private final static int FIELD_WIDTH = 4;
@@ -175,4 +177,33 @@ Tile[][] newGameTiles = new Tile[tile[0].length][tile[1].length];
         score=previousScores.pop();}
 
        }
-   }
+
+    public void randomMove() {
+        int n = ((int) (Math.random() * 100)) % 4;
+        switch(n){
+            case 0: left();break;
+            case 1: right();break;
+            case 2: up();break;
+            case 3: down();break;
+
+        }
+    }
+    public boolean hasBoardChanged(){
+        Tile[][] stackTile = previousStates.peek();
+        AtomicInteger c = new AtomicInteger();
+        AtomicInteger b = new AtomicInteger();
+        Arrays.stream(gameTiles).forEach(x ->Arrays.stream(x).forEach(f-> c.addAndGet(f.value)));
+        Arrays.stream(stackTile).forEach(x ->Arrays.stream(x).forEach(f-> b.addAndGet(f.value)));
+        return c.get() != b.get();
+
+    }
+    public MoveEfficiency getMoveEfficiency(Move move){
+        MoveEfficiency moveEfficiency;
+        move.move();
+        if (hasBoardChanged()) moveEfficiency = new MoveEfficiency(getEmptyTiles().size(), score, move);
+        else moveEfficiency = new MoveEfficiency(-1, 0, move);
+        rollback();
+
+        return moveEfficiency;
+    }
+}

@@ -6,8 +6,12 @@ public class Main {
     public static void main(String[] args) {
         Model model = new Model();
         Controller controller = new Controller(model);
-         /*Tile[][] gameTiles = {{new Tile(1),new Tile(2),new Tile(3),new Tile(4)},{new Tile(1),new Tile(2),new Tile(3),new Tile(4)},{new Tile(1),new Tile(2),new Tile(3),new Tile(4)},{new Tile(1),new Tile(2),new Tile(3),new Tile(4)}};
-        model.saveState(gameTiles);*/
+//        int c = 0;
+//        AtomicInteger b = new AtomicInteger();
+//         Tile[][] gameTiles = {{new Tile(1),new Tile(2),new Tile(3),new Tile(4)},{new Tile(1),new Tile(2),new Tile(3),new Tile(4)},{new Tile(1),new Tile(2),new Tile(3),new Tile(4)},{new Tile(1),new Tile(2),new Tile(3),new Tile(4)}};
+//        Arrays.stream(gameTiles).forEach(x ->Arrays.stream(x).forEach(f-> b.addAndGet(f.value)));
+//        System.out.println(b);
+//         model.saveState(gameTiles);
         JFrame game = new JFrame();
 
         game.setTitle("2048");
