@@ -2,17 +2,25 @@ package com.javarush.task.task35.task3513;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class Model {
     private final static int FIELD_WIDTH = 4;
     private Tile[][] gameTiles /*= {{new Tile(1),new Tile(2),new Tile(3),new Tile(4)},{new Tile(1),new Tile(2),new Tile(3),new Tile(4)},{new Tile(1),new Tile(2),new Tile(3),new Tile(4)},{new Tile(1),new Tile(2),new Tile(3),new Tile(4)}}*/;
     protected int score;
     protected int maxTile;
+   private  Stack<Tile[][]> previousStates;
+   private Stack <Integer> previousScores;
+    boolean isSaveNeeded = true;
+
 
     public Model() {
         resetGameTiles();
         this.score = 0;
         this.maxTile = 0;
+        previousScores = new Stack();
+        previousStates = new Stack();
+
     }
 
     public Tile[][] getGameTiles() {
@@ -99,13 +107,17 @@ public class Model {
         gameTiles = newArray;
     }
     public void left(){
+        if(isSaveNeeded) saveState(this.gameTiles);
         boolean someTilesHasChanged = false;
         for(Tile[]tiles:gameTiles){
             if(compressTiles(tiles)|mergeTiles(tiles))someTilesHasChanged=true;
         }
         if(someTilesHasChanged) addTile();
+        isSaveNeeded = true;
+
     }
     public void right(){
+        saveState(this.gameTiles);
         rotate();
         rotate();
        left();
@@ -113,13 +125,17 @@ public class Model {
         rotate();
     }
     public void down(){
-      rotate();
+        saveState(this.gameTiles);
+
+        rotate();
        left();
         rotate();
         rotate();
         rotate();
     }
     public void up(){
+        saveState(this.gameTiles);
+
         rotate();
         rotate();
         rotate();
@@ -142,4 +158,21 @@ public class Model {
         }
         return false;
     }
-}
+   private void  saveState(Tile[][] tile) {
+Tile[][] newGameTiles = new Tile[tile[0].length][tile[1].length];
+       for (int i = 0; i < tile.length; i++) {
+           for (int j = 0; j < tile.length; j++){
+               newGameTiles[i][j] = new Tile(tile[i][j].value);
+           }
+       }
+       previousStates.push(newGameTiles);
+       previousScores.push(score);
+       isSaveNeeded = false;
+    }
+       public void rollback (){
+        if(!previousScores.empty()&&!previousStates.empty())
+        {gameTiles=previousStates.pop();
+        score=previousScores.pop();}
+
+       }
+   }

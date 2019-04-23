@@ -50,6 +50,11 @@ public class Tile {
             return new Color(0xedc22e);
         }else {return new Color(0xff0000);}
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(this.value)+" ";
+    }
 }
 
 
